@@ -1,3 +1,5 @@
 **Booting up the Pi**
 	- There are 2 processors on the Raspberry Pi: a VideoCore GPU and an ARM processor (ARM1176JZF-S)
 	- The VideoCore GPU runs at reset or power on and sets the stage up for the ARM processor to run the operating system.
+
+**Understanding the compiler and linker**
