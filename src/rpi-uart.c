@@ -9,7 +9,7 @@
 */
 
 #include <stdint.h>
-#include "rpi-uart.h"
+#include "../include/rpi-uart.h"
 
 static rpi_aux_t* rpiAux = (rpi_aux_t*)RPI_AUX_BASE;
 static rpi_uart_t* rpiMiniUart = (rpi_uart_t*)RPI_UART_BASE;

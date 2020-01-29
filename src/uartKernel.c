@@ -1,6 +1,6 @@
-#include "rpi-uart.h"
-#include "rpi-gpio.h"
-#include "rpi-interrupts.h"
+#include "../include/rpi-uart.h"
+#include "../include/rpi-gpio.h"
+#include "../include/rpi-interrupts.h"
 
 //GPIO14  TXD0 and TXD1
 //GPIO15  RXD0 and RXD1

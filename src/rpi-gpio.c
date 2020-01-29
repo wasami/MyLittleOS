@@ -9,7 +9,7 @@
 */
 
 #include <stdint.h>
-#include "rpi-gpio.h"
+#include "../include/rpi-gpio.h"
 
 static rpi_gpio_t* rpiGpio = (rpi_gpio_t*)RPI_GPIO_BASE;
 

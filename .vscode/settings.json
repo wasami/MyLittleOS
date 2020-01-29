@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "rpi-uart.h": "c",
+        "rpi-base.h": "c",
+        "rpi-gpio.h": "c",
+        "rpi-interrupts.h": "c"
+    }
+}
