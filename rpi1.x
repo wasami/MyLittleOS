@@ -202,6 +202,11 @@ SECTIONS
     _stack = .;
     *(.stack)
   }
+  .heap         0x80004 :
+  {
+    _heap = .;
+    *(.heap)
+  }
   /* Stabs debugging sections.  */
   .stab          0 : { *(.stab) }
   .stabstr       0 : { *(.stabstr) }
