@@ -1,12 +1,12 @@
 
 typedef struct 
 {
-    char buffer[50];
+    char buffer[10];
     int head;
     int tail;
-    int size = 50;
+    int size;
 } fifo_t;
 
 extern void fifo_init(fifo_t* f);
-extern void fifo_read(fifo_t* f, void* storage);
-extern void fifo_write(fifo_t* f, const void* data, int nbytes);
+extern int fifo_read(fifo_t* f, void* storage, int nbytes);
+extern int fifo_write(fifo_t* f, const void* data, int nbytes);

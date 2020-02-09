@@ -30,5 +30,9 @@ typedef struct {
 extern rpi_uart_t* RPI_GetMiniUart(void);
 extern void RPI_UartInit(void);
 extern rpi_aux_t* RPI_GetAux(void);
+extern void RPI_MiniUartInit(void);
+extern int RPI_WriteToMiniUart(char* string, int nbytes);
+extern int RPI_ReadFromMiniUart(char* data, int nbytes);
+extern void RPI_MiniUart_ISR(void);
 
 #endif

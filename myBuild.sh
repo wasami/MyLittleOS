@@ -22,8 +22,8 @@ lflags="-Wl,-T,rpi1.x"
 kernel_elf="kernel.elf"
 kernel_img="kernel.img"
 
-printf "%s\n" "${toolchain}gcc ${cflags} ${scriptdir}/*.c ${scriptdir}/*.s -o ${kernel_elf}"
-${toolchain}gcc ${cflags} ${lflags} ${scriptdir}/*.c ${scriptdir}/*.s -o ${kernel_elf}
+printf "%s\n" "${toolchain}gcc ${cflags} ${scriptdir}/src/*.c ${scriptdir}/lib/*.c ${scriptdir}/src/*.s -o ${kernel_elf}"
+${toolchain}gcc ${cflags} ${lflags} ${scriptdir}/src/*.c ${scriptdir}/lib/*.c ${scriptdir}/src/*.s -o ${kernel_elf}
 
 if [ $? -ne 0 ]; then
     echo "ERROR: Failed to compile!" >&2
