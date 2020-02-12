@@ -16,6 +16,20 @@
 /** The base address of the GPIO peripheral (ARM Physical Address) */
 #define RPI_GPIO_BASE       ( PERIPHERAL_BASE + 0x200000UL )
 
+/* Different Raspberry pi models have the ACT LED on different GPIO pins. The RPI3 doesn't have
+   access to the ACT LED through a GPIO pin can so can't be used in this tutorial, but the RPI3B+
+   does have the ACT LED on a GPIO pin again and so can be used with this tutorial! */
+
+/* Very early models of the RPi including the Model A or B had ACT LED available on GPIO */
+#define LED_GPFSEL      GPFSEL1
+#define LED_GPFBIT      18
+#define LED_GPSET       GPSET0
+#define LED_GPCLR       GPCLR0
+#define LED_GPIO_BIT    16
+
+#define LED_ON()        do { RPI_GetGpio()->LED_GPCLR = ( 1 << LED_GPIO_BIT ); } while( 0 )
+#define LED_OFF()       do { RPI_GetGpio()->LED_GPSET = ( 1 << LED_GPIO_BIT ); } while( 0 )
+
 
 /***/
 #define RPI_GPIO_FSEL0_00_INPUT     ( 0 )
@@ -47,6 +61,8 @@
 
 #define RPI_GPIO_FSEL0_09_INPUT     ( 0 << 27 )
 #define RPI_GPIO_FSEL0_09_OUTPUT    ( 1 << 27 )
+
+
 
 
 /** The GPIO Peripheral is described in section 6 of the BCM2835 Peripherals

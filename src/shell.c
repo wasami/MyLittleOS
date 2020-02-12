@@ -1,14 +1,16 @@
+#include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+
 #include "../include/fifo.h"
 #include "../include/rpi-uart.h"
-
-static char test_cmd[] = {'T','e','s','t', 0};
-static char test_success[] = {'S', 'u', 'c', 'c', 'e', 's', 's', 0};
-static char test_fail[] = {'F', 'a', 'i', 'l', 'e', 'd', 0};
 
 // Waits and listens to commands
 int shell_main(void)
 {
+    static char command_not_found_text[] = "\nNo such command found.\r\n";
+    static char enter_command_text[] = "Enter command (and end with ;): ";
+
     char* data;
     char* character;
     int bytes_read;
@@ -19,11 +21,11 @@ int shell_main(void)
 
     character = data;
 
-    bytes_written = RPI_WriteToMiniUart(&test_cmd[0], 4);
-
     // Always executing
     while (1)
     {
+        RPI_printString(&enter_command_text[0], 32);
+
         // Keep reading till end of string
         while (*character++ != ';')
         {
@@ -34,12 +36,10 @@ int shell_main(void)
 
         bytes_read = 0;     // Reset bytes read
 
-        if ( strcmp(data, &test_cmd[0]) == 0)
-        {
-            bytes_written = RPI_WriteToMiniUart(&test_success[0], 8);
-        } else {
-            bytes_written = RPI_WriteToMiniUart(&test_fail[0], 7);
-        }
+        RPI_printString(&command_not_found_text[0], 25);
+
+        //reset character pointer
+        character = data;
     }
 
     return 0;

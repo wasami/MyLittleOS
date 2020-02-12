@@ -53,7 +53,7 @@ _reset_:
     // stack pointer which differs to the application stack pointer:
     mov r0, #(CPSR_MODE_IRQ | CPSR_IRQ_INHIBIT | CPSR_FIQ_INHIBIT )
     msr cpsr_c, r0
-    mov sp, #(63 * 1024 * 1024)
+    mov sp, #0x7000
 
     // Switch back to supervisor mode (our application mode) and
     // set the stack pointer towards the end of RAM. Remember that the
@@ -61,13 +61,14 @@ _reset_:
     // up memory toward the application stack.
     mov r0, #(CPSR_MODE_SVR | CPSR_IRQ_INHIBIT | CPSR_FIQ_INHIBIT )
     msr cpsr_c, r0
+    mov sp, #0x8000
 
     // Set the stack pointer at some point in RAM that won't harm us
     // It's different from the IRQ stack pointer above and no matter
     // what the GPU/CPU memory split, 64MB is available to the CPU
     // Keep it within the limits and also keep it aligned to a 32-bit
     // boundary!
-    ldr     sp, =0x8000
+    // ldr     sp, =0x8000
 
     // Run the c startup function - should not return and will call kernel_main
     b       _cstartup
