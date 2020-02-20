@@ -8,14 +8,19 @@
 
 */
 
-#ifndef RPI_SYSTIMER_H
-#define RPI_SYSTIMER_H
-
 #include <stdint.h>
 
 #include "rpi-base.h"
 
 #define RPI_SYSTIMER_BASE       ( PERIPHERAL_BASE + 0x3000 )
+
+#define RPI_SYSTIMER_0_IRQ      (1 << 0)
+#define RPI_SYSTIMER_1_IRQ      (1 << 1) 
+#define RPI_SYSTIMER_2_IRQ      (1 << 2) 
+#define RPI_SYSTIMER_3_IRQ      (1 << 3)       
+
+#define QUARTER_OF_SECOND       250000
+#define TENTH_OF_SECOND         100000
 
 
 typedef struct {
@@ -31,5 +36,3 @@ typedef struct {
 
 extern rpi_sys_timer_t* RPI_GetSystemTimer(void);
 extern void RPI_WaitMicroSeconds( uint32_t us );
-
-#endif

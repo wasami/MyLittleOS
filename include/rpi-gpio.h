@@ -63,7 +63,77 @@
 #define RPI_GPIO_FSEL0_09_OUTPUT    ( 1 << 27 )
 
 
+typedef enum {
+    FS_INPUT = 0,
+    FS_OUTPUT,
+    FS_ALT5,
+    FS_ALT4,
+    FS_ALT0,
+    FS_ALT1,
+    FS_ALT2,
+    FS_ALT3,
+    } rpi_gpio_alt_function_t;
 
+/* A mask to be able to clear the bits in the register before setting the
+   value we require */
+#define FS_MASK     (7)
+
+typedef enum {
+    RPI_GPIO0 = 0,
+    RPI_GPIO1,
+    RPI_GPIO2,
+    RPI_GPIO3,
+    RPI_GPIO4,
+    RPI_GPIO5,
+    RPI_GPIO6,
+    RPI_GPIO7,
+    RPI_GPIO8,
+    RPI_GPIO9,
+    RPI_GPIO10 = 10,
+    RPI_GPIO11,
+    RPI_GPIO12,
+    RPI_GPIO13,
+    RPI_GPIO14,
+    RPI_GPIO15,
+    RPI_GPIO16,
+    RPI_GPIO17,
+    RPI_GPIO18,
+    RPI_GPIO19,
+    RPI_GPIO20 = 20,
+    RPI_GPIO21,
+    RPI_GPIO22,
+    RPI_GPIO23,
+    RPI_GPIO24,
+    RPI_GPIO25,
+    RPI_GPIO26,
+    RPI_GPIO27,
+    RPI_GPIO28,
+    RPI_GPIO29,
+    RPI_GPIO30 = 30,
+    RPI_GPIO31,
+    RPI_GPIO32,
+    RPI_GPIO33,
+    RPI_GPIO34,
+    RPI_GPIO35,
+    RPI_GPIO36,
+    RPI_GPIO37,
+    RPI_GPIO38,
+    RPI_GPIO39,
+    RPI_GPIO40 = 40,
+    RPI_GPIO41,
+    RPI_GPIO42,
+    RPI_GPIO43,
+    RPI_GPIO44,
+    RPI_GPIO45,
+    RPI_GPIO46,
+    RPI_GPIO47,
+    RPI_GPIO48,
+    RPI_GPIO49,
+    RPI_GPIO50 = 50,
+    RPI_GPIO51,
+    RPI_GPIO52,
+    RPI_GPIO53,
+    } rpi_gpio_pin_t;
 
 /** The GPIO Peripheral is described in section 6 of the BCM2835 Peripherals
     documentation.
@@ -127,7 +197,8 @@ typedef struct {
 } rpi_gpio_t;
 
 
-extern rpi_gpio_t* RPI_GetGpio(void);
-extern void RPI_GpioInit(void);
+extern rpi_gpio_t* RPI_GetGpio( void );
+extern void RPI_SetGpioPinFunction( rpi_gpio_pin_t gpio, rpi_gpio_alt_function_t func );
+extern void RPI_GpioInit( void );
 
 #endif

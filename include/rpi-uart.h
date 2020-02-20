@@ -15,6 +15,10 @@
 #define AUX_IRQ_SPI1                ( 1 << 1 )
 #define AUX_IRQ_MU                  ( 1 << 0 )
 
+// baud rate
+//((250,000,000/115200)/8)-1 = 270
+#define AUX_MU_BAUD_RATE            ( 270 )
+
 #define AUX_MULCR_8BIT_MODE         ( 3 << 0 )  /* See errata for this value */
 #define AUX_MULCR_BREAK             ( 1 << 6 )
 #define AUX_MULCR_DLAB_ACCESS       ( 1 << 7 )
@@ -35,6 +39,7 @@
 #define AUX_MUCNTL_RTS_FIFO         ( 3 << 4 )
 #define AUX_MUCNTL_RTS_ASSERT       ( 1 << 6 )
 #define AUX_MUCNTL_CTS_ASSERT       ( 1 << 7 )
+#define AUX_MUCNTL_CLEAR_FIFO       ( 0XC6 )
 
 #define AUX_MUSTAT_SYMBOL_AV        ( 1 << 0 )
 #define AUX_MUSTAT_SPACE_AV         ( 1 << 1 )
@@ -74,7 +79,8 @@ extern void RPI_UartInit( void );
 extern rpi_aux_t* RPI_GetAux( void );
 extern void RPI_MiniUartInit( void );
 extern void RPI_WriteToMiniUart( char c );
-extern int RPI_printString( char* string, int len );
+extern int RPI_printStringOfLen( char* string, int len );
+extern void RPI_printString( char* string );
 extern int RPI_ReadFromMiniUart( char* data, int nbytes );
 extern void RPI_MiniUart_ISR( void );
 

@@ -32,6 +32,16 @@
 #define RPI_BASIC_ACCESS_ERROR_1_IRQ    (1 << 6)
 #define RPI_BASIC_ACCESS_ERROR_0_IRQ    (1 << 7)
 
+#define RPI_SYS_TIMER_CMP_0_IRQ         (1 << 0)    // USED BY GPU
+#define RPI_SYS_TIMER_CMP_1_IRQ         (1 << 1)
+#define RPI_SYS_TIMER_CMP_2_IRQ         (1 << 2)    // USED BY GPU
+#define RPI_SYS_TIMER_CMP_3_IRQ         (1 << 3)
+
+#define CLEAR_SYS_TIMER_CMP_0_IRQ       (1 << 4)    // USED BY GPU
+#define CLEAR_SYS_TIMER_CMP_1_IRQ       (1 << 5)
+#define CLEAR_SYS_TIMER_CMP_2_IRQ       (1 << 6)    // USED BY GPU
+#define CLEAR_SYS_TIMER_CMP_3_IRQ       (1 << 7)
+
 
 /** @brief The interrupt controller memory mapped register set */
 typedef struct {

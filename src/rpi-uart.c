@@ -13,10 +13,8 @@
 #include "../include/rpi-gpio.h"
 #include "../include/fifo.h"
 
-//GPIO14  TXD0 and TXD1
-//GPIO15  RXD0 and RXD1
-//alt function 5 for uart1
-//alt function 0 for uart0
+
+
 
 // baud rate
 //((250,000,000/115200)/8)-1 = 270
@@ -41,41 +39,32 @@ void RPI_MiniUartInit(void)
 
     rpi_gpio_t* gpioReg = RPI_GetGpio();
 
-    rpiAux->AUX_ENABLES |= 1;
+    rpiAux->AUX_ENABLES |= 1;               // Enable mini uart (this also enables access to its registers)
 
-    rpiMiniUart->AUX_MU_CNTL_REG = 0;      //Enable mini uart (this also enables access to its registers)
-    rpiMiniUart->AUX_MU_IER_REG = 0;        //Disable receive and transmit interrupts
-    rpiMiniUart->AUX_MU_LCR_REG = 1;        //Enable 8 bit mode
-    rpiMiniUart->AUX_MU_MCR_REG = 0;        //Set RTS line to be always high
-    rpiMiniUart->AUX_MU_BAUD_REG = 270;     //Set baud rate to 115200
+    rpiMiniUart->AUX_MU_IER_REG = 0;                        // Disable receive and transmit interrupts
+    rpiMiniUart->AUX_MU_CNTL_REG = 0;                       // Disable flow control
+    rpiMiniUart->AUX_MU_LCR_REG = AUX_MULCR_8BIT_MODE;      // Enable 8 bit mode
+    rpiMiniUart->AUX_MU_MCR_REG = 0;                        // Set RTS line to be always high
+    rpiMiniUart->AUX_MU_IIR_REG = AUX_MUCNTL_CLEAR_FIFO;    // Clear FIFOs 
 
-    i = gpioReg->GPFSEL1;
-    i &= ~(7<<12);      //gpio14
-    i |= 2<<12;         //alt5
-    i &= ~(7<<15);      // clean gpio15
-    i |= 2<<15;         // set alt5 for gpio 15
-    gpioReg->GPFSEL1 = i;
+    rpiMiniUart->AUX_MU_BAUD_REG = AUX_MU_BAUD_RATE;        // Set baud rate to 115200
 
-    //_put32(GPPUD,0);
+    /* Setup GPIO 14 and 15 as alternative function 5 which is
+        UART 1 TXD/RXD. These need to be set before enabling the UART */
+    RPI_SetGpioPinFunction( RPI_GPIO14, FS_ALT5 );
+    RPI_SetGpioPinFunction( RPI_GPIO15, FS_ALT5 );
+
     gpioReg->GPPUD = 0;
-    
-    //wait 150 cycles
-    for(i=0;i<150;i++);
-
-    //_put32(GPPUDCLK0,(1<<14)|(1<<15));
+    for(i=0;i<150;i++) {}     //wait 150 cycles
     gpioReg->GPPUDCLK0 = (1<<14)|(1<<15);
-
-    //wait 150 cycles
-    for(i=0;i<150;i++);
-
-    //_put32(GPPUDCLK0,0);
+    for(i=0;i<150;i++) {}     //wait 150 cycles
     gpioReg->GPPUDCLK0 = 0;
 
     /* enable reciever interrupt only */
-    rpiMiniUart->AUX_MU_IER_REG = 2;
+    // rpiMiniUart->AUX_MU_IER_REG = 2;
 
     // Setup read and write buffers for mini UART
-    fifo_init(&fifo_buffer);
+    // fifo_init(&fifo_buffer);
 
     /* Enable receiver and transmitter */
     rpiMiniUart->AUX_MU_CNTL_REG = 3;
@@ -90,7 +79,7 @@ void RPI_WriteToMiniUart( char c )
     rpiMiniUart->AUX_MU_IO_REG = c;
 }
 
-int RPI_printString( char* string, int len )
+int RPI_printStringOfLen( char* string, int len )
 {
     int i;
 
@@ -98,6 +87,14 @@ int RPI_printString( char* string, int len )
         RPI_WriteToMiniUart( *string++ );
 
     return len;
+}
+
+void RPI_printString( char* string)
+{
+    while( *string != '\0')
+    {
+        RPI_WriteToMiniUart( *string++ );
+    }
 }
 
 

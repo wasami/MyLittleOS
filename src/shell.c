@@ -11,35 +11,33 @@ int shell_main(void)
     static char command_not_found_text[] = "\nNo such command found.\r\n";
     static char enter_command_text[] = "Enter command (and end with ;): ";
 
-    char* data;
+    int i;
+    rpi_uart_t* rpiMiniUart = RPI_GetMiniUart();
+
+    char input[10];
     char* character;
-    int bytes_read;
-    int bytes_written;
-
-    // Read one byte at a time
-    bytes_read = RPI_ReadFromMiniUart(data, 1);
-
-    character = data;
+    
+    character = &input[0];
 
     // Always executing
     while (1)
     {
-        RPI_printString(&enter_command_text[0], 32);
+        RPI_printString(&enter_command_text[0]);
 
-        // Keep reading till end of string
-        while (*character++ != ';')
+        // Poll MiniUART for characters
+        for( i=0; i < 10; i++)
         {
-            bytes_read += RPI_ReadFromMiniUart(character, 1);
+            while ((rpiMiniUart->AUX_MU_LSR_REG & 1) == 0) {}
 
-            // If bytes read is 0 sleep
+            *character = rpiMiniUart->AUX_MU_IO_REG;
+
+            //Echo 
+            rpiMiniUart->AUX_MU_IO_REG = *character;
+
+            character++;
         }
 
-        bytes_read = 0;     // Reset bytes read
-
-        RPI_printString(&command_not_found_text[0], 25);
-
-        //reset character pointer
-        character = data;
+        RPI_printString(&command_not_found_text[0]);
     }
 
     return 0;

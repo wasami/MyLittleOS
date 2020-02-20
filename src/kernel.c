@@ -7,6 +7,11 @@
 #include "../include/fifo.h"
 
 extern void _enable_interrupts(void);
+extern void _jump_to_user_code(void* func);
+extern void _test(void);
+extern void dummy_a(void);
+extern void dummy_b(void);
+
 
 /** Main function - we'll never return from here */
 void kernel_main ( unsigned int r0, unsigned int r1, unsigned int atags )
@@ -19,7 +24,7 @@ void kernel_main ( unsigned int r0, unsigned int r1, unsigned int atags )
     /* Enable the timer interrupt IRQ */
     RPI_GetIrqController()->Enable_Basic_IRQs = RPI_BASIC_ARM_TIMER_IRQ;
 
-    /* Setup the system timer interrupt */
+    /* Setup the Arm timer interrupt */
     /* Timer frequency = Clk/256 * 0x400 */
     RPI_GetArmTimer()->Load = 0x400;
 
@@ -30,20 +35,41 @@ void kernel_main ( unsigned int r0, unsigned int r1, unsigned int atags )
             RPI_ARMTIMER_CTRL_INT_ENABLE |
             RPI_ARMTIMER_CTRL_PRESCALE_256;
 
+    /* Enable the System timer compare 0 interrupt IRQ */
+    // RPI_GetIrqController()->Enable_IRQs_1 = RPI_SYS_TIMER_CMP_1_IRQ;
+
+    /* Setup System timer*/
+    // RPI_GetSystemTimer()->compare1 = TENTH_OF_SECOND;
+
     // setup mini UART
     RPI_MiniUartInit();
 
     /* Enable the UART interrupt IRQ */
-    RPI_GetIrqController()->Enable_IRQs_1 |= (1 << 29);
+    //RPI_GetIrqController()->Enable_IRQs_1 |= (1 << 29);
 
     /* Enable interrupts! */
-    _enable_interrupts();
+    //_enable_interrupts();
 
-    char shell_start_text[] = "\r\nStarting shell program...\r\n";
+    char shell_start_text[] = "\n\rStarting shell program...\n\r";
+    RPI_printString(&shell_start_text[0]);
+    
+    /*
+        This causes issues
+        uint32_t microSeconds = 5000000;
+        RPI_WaitMicroSeconds(microSeconds);
+    */
 
-    RPI_printString(&shell_start_text[0], 28);
+    /*
+        char something[] = "testing";
+        RPI_printString(&something[0]);
+    */
 
-    //shell_main();
+    /* Setup PCB block */
+
+    /* Switch to user mode  */
+
+    /* Execute first user process */
+    _jump_to_user_code(&dummy_a);
 
     while(1)
     {
