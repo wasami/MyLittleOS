@@ -22,15 +22,13 @@ typedef struct {
     rpi_reg_rw_t r12;
 } registers;
 
-typedef struct process_block {
-    rpi_reg_rw_t regs[13];
+typedef struct process {
+    registers regs;
     volatile uint32_t pc;
-    volatile uint32_t psr;
     volatile uint32_t sp;
-    volatile uint32_t state;
-    volatile uint32_t time_lived;
-    process_block* next_proc;
-} process_block;
+    volatile uint32_t flags;
+    process* next;
+} process;
 
 typedef struct {
     process proc;

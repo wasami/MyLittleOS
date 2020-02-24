@@ -9,10 +9,9 @@
 
 .global _start
 .global _enable_interrupts
-.global _jump_to_user_code
-.global _test
+.global _start_user_program
 
-// See ARM section A2.2 (Processor Modes)
+// Processor Modes
 
 .equ    CPSR_MODE_USER,         0x10
 .equ    CPSR_MODE_FIQ,          0x11
@@ -22,10 +21,12 @@
 .equ    CPSR_MODE_UNDEFINED,    0x1B
 .equ    CPSR_MODE_SYSTEM,       0x1F
 
-// See ARM section A2.5 (Program status registers)
+// Program status registers
 .equ    CPSR_IRQ_INHIBIT,       0x80
 .equ    CPSR_FIQ_INHIBIT,       0x40
 .equ    CPSR_THUMB,             0x20
+
+.equ    CPSR_UNAFFECTED_BITS,   0xFFFFFF00
 
 _start:
     ldr pc, _reset_h
@@ -60,7 +61,13 @@ _reset_:
     // stack pointer which differs to the application stack pointer
     mov     r0, #(CPSR_MODE_IRQ | CPSR_IRQ_INHIBIT | CPSR_FIQ_INHIBIT )
     msr     cpsr_c, r0
-    mov     sp, #0x7000
+    mov     sp, #0x6000
+
+    //  Setup stack pointer for user mode
+    mov     r0, #(CPSR_MODE_SYSTEM | CPSR_IRQ_INHIBIT | CPSR_FIQ_INHIBIT )
+    msr     cpsr_c, r0
+    mov     sp, #0x4000
+
 
     // Switch back to supervisor mode (our application mode) and
     // set the stack pointer towards the end of RAM. Remember that the
@@ -104,10 +111,7 @@ _enable_interrupts:
     Currupts    :R1
     Returns     :None
  /*--------------------------------------*/
-_jump_to_user_code:
-    mov     r1, #(CPSR_MODE_USER)
-    msr     spsr, r1
-    movs    pc, r0      
-
-_test:
-    svc     0
+_start_user_program:
+    mov    r14, #0x10
+    msr    spsr_c, r14
+    movs   pc, r0

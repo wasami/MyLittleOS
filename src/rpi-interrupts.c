@@ -72,35 +72,8 @@ void __attribute__((interrupt("UNDEF"))) undefined_instruction_vector(void)
 
     The CPU will start executing this function.
 */
-void __attribute__((interrupt("SWI"))) software_interrupt_vector(unsigned int number, unsigned int* svc_args)
+void __attribute__((interrupt("SWI"))) software_interrupt_vector(void)
 {
-    //unsigned int svc_number;    
-    /*    * Stack contains:    * r0, r1, r2, r3, r12, r14, the return address and xPSR    * First argument (r0) is svc_args[0]    */    
-    //svc_number = ((char *)svc_args[6])[-2];
-     
-    // switch(number)    
-    // {        
-    //     /* SVC number 0 - Write character to mini UART */
-    //     case 0:            
-    //         unsigned int value_in_reg_0 = svc_args[0];           // Get char to print
-    //         rpi_uart_t* rpiMiniUart = RPI_GetMiniUart();    
-
-    //         /* Wait until the UART has an empty space in the FIFO */
-    //         while( ( rpiMiniUart->AUX_MU_LSR_REG & AUX_MULSR_TX_EMPTY ) == 0 ) { }
-
-    //         /* Write the character to the FIFO for transmission */
-    //         rpiMiniUart->AUX_MU_IO_REG = value_in_reg_0;         
-    //         break;
-
-    //     /* Handle SVC 01 */
-    //     case 1:       
-    //         LED_ON();     
-    //         break;
-    //     /* Unknown SVC - Report error */
-    //     default:          
-    //         break;    
-    // }
-
     char string = '3';
     while( 1 )
     {

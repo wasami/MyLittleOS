@@ -5,12 +5,10 @@
 #include "../include/rpi-armtimer.h"
 #include "../include/shell.h"
 #include "../include/fifo.h"
+#include "../include/dummy.h"
 
 extern void _enable_interrupts(void);
-extern void _jump_to_user_code(void* func);
-extern void _test(void);
-extern void dummy_a(void);
-extern void dummy_b(void);
+extern void _start_user_program(void* func);
 
 
 /** Main function - we'll never return from here */
@@ -48,10 +46,7 @@ void kernel_main ( unsigned int r0, unsigned int r1, unsigned int atags )
     //RPI_GetIrqController()->Enable_IRQs_1 |= (1 << 29);
 
     /* Enable interrupts! */
-    //_enable_interrupts();
-
-    char shell_start_text[] = "\n\rStarting shell program...\n\r";
-    RPI_printString(&shell_start_text[0]);
+    _enable_interrupts();
     
     /*
         This causes issues
@@ -59,17 +54,12 @@ void kernel_main ( unsigned int r0, unsigned int r1, unsigned int atags )
         RPI_WaitMicroSeconds(microSeconds);
     */
 
-    /*
-        char something[] = "testing";
-        RPI_printString(&something[0]);
-    */
-
     /* Setup PCB block */
 
     /* Switch to user mode  */
 
     /* Execute first user process */
-    _jump_to_user_code(&dummy_a);
+    _start_user_program(&dummy_print_string);
 
     while(1)
     {
