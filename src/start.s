@@ -64,9 +64,9 @@ _reset_:
     mov     sp, #0x6000
 
     //  Setup stack pointer for user mode
-    mov     r0, #(CPSR_MODE_SYSTEM | CPSR_IRQ_INHIBIT | CPSR_FIQ_INHIBIT )
-    msr     cpsr_c, r0
-    mov     sp, #0x4000
+    // mov     r0, #(CPSR_MODE_SYSTEM | CPSR_IRQ_INHIBIT | CPSR_FIQ_INHIBIT )
+    // msr     cpsr_c, r0
+    // mov     sp, #0x5000
 
 
     // Switch back to supervisor mode (our application mode) and

@@ -202,10 +202,15 @@ SECTIONS
     _stack = .;
     *(.stack)
   }
-  .heap         0x80004 :
+  .heap_low         0x5000 :
   {
-    _heap = .;
-    *(.heap)
+    _heap_low = .;
+    *(.heap_low)
+  }
+  .heap_top         0x1000 :
+  {
+    _heap_top = .;
+    *(.heap_top)
   }
   /* Stabs debugging sections.  */
   .stab          0 : { *(.stab) }

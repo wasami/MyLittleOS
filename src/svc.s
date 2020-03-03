@@ -10,11 +10,10 @@ _svc_handler:
 	ldr		r0, [lr, #-4]
 	bic		r0, r0, #Extract_SVC
 
-	MOV		r1, sp
+	mov		r1, sp
 
     cmp		r0, #Num_Of_SVC			// Check if SVC entry is within range
 	
-	// Exploits the PC prefetch which points to table
 	blle	SVC_Handler_Main
 	pop		{r0-r12, lr}      // Restore registers and return.
 	movs	pc, lr

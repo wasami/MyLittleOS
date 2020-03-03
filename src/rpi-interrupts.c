@@ -59,10 +59,10 @@ void __attribute__((interrupt("ABORT"))) reset_vector(void)
 void __attribute__((interrupt("UNDEF"))) undefined_instruction_vector(void)
 {
     char string = '2';
+    RPI_WriteToMiniUart(string);
     while( 1 )
     {
         LED_ON();
-        RPI_WriteToMiniUart(string);
     }
 }
 
@@ -75,10 +75,10 @@ void __attribute__((interrupt("UNDEF"))) undefined_instruction_vector(void)
 void __attribute__((interrupt("SWI"))) software_interrupt_vector(void)
 {
     char string = '3';
+    RPI_WriteToMiniUart(string);
     while( 1 )
     {
         LED_ON();
-        RPI_WriteToMiniUart(string);
     }
 }
 
@@ -92,10 +92,10 @@ void __attribute__((interrupt("SWI"))) software_interrupt_vector(void)
 void __attribute__((interrupt("ABORT"))) prefetch_abort_vector(void)
 {
     char string = '4';
+    RPI_WriteToMiniUart(string);
     while( 1 )
     {
         LED_ON();
-        RPI_WriteToMiniUart(string);
     }
 }
 
@@ -109,10 +109,10 @@ void __attribute__((interrupt("ABORT"))) prefetch_abort_vector(void)
 void __attribute__((interrupt("ABORT"))) data_abort_vector(void)
 {
     char string = '5';
+    RPI_WriteToMiniUart(string);
     while( 1 )
     {
         LED_ON();
-        RPI_WriteToMiniUart(string);
     }
 }
 

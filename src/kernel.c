@@ -5,11 +5,22 @@
 #include "../include/rpi-armtimer.h"
 #include "../include/shell.h"
 #include "../include/fifo.h"
+#include "../include/process.h"
+#include "../include/print.h"
 #include "../include/dummy.h"
 
 extern void _enable_interrupts(void);
 extern void _start_user_program(void* func);
+extern void _start_user_process(void* func);
 
+void exception(char* message)
+{
+    RPI_printString(message);
+    while(1)
+    {
+
+    }
+}
 
 /** Main function - we'll never return from here */
 void kernel_main ( unsigned int r0, unsigned int r1, unsigned int atags )
@@ -46,20 +57,40 @@ void kernel_main ( unsigned int r0, unsigned int r1, unsigned int atags )
     //RPI_GetIrqController()->Enable_IRQs_1 |= (1 << 29);
 
     /* Enable interrupts! */
-    _enable_interrupts();
+    //_enable_interrupts();
     
-    /*
-        This causes issues
-        uint32_t microSeconds = 5000000;
-        RPI_WaitMicroSeconds(microSeconds);
-    */
+    //char createProcessStr[] = "\r\nCreating New Process";
+    //char startingProcessStr[] = "\r\nStarting User Program";
+    char err[] = "\r\nNo space on pcb!";
 
-    /* Setup PCB block */
+    /* Create process */
+    //RPI_printString(&createProcessStr[0]);
+    process* newProc = getAvailablePCB();
+    
+    if (newProc == 0) 
+    {
+        exception(&err[0]);
+    }
+    createProcess(newProc, &dummy_process_one);
 
-    /* Switch to user mode  */
+    /* Create process  */
+    //RPI_printString(&createProcessStr[0]);
+    newProc = getAvailablePCB();
 
-    /* Execute first user process */
-    _start_user_program(&dummy_print_string);
+    if (newProc == 0) 
+    {
+        exception(&err[0]);
+    }
+    createProcess(newProc, &dummy_process_two);
+    setRunningProcess(newProc);
+
+    /* Execute first user dummy_process_two */
+    //RPI_printString(&startingProcessStr[0]);
+
+    newProc->state = PROCESS_RUNNING;
+    _start_user_process(newProc);
+    
+    //_start_user_program(&dummy_process_two);
 
     while(1)
     {
