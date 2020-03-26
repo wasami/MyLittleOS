@@ -1,7 +1,3 @@
-/*
-    Scheduler
-*/
-
 #include "../include/process.h"
 #include "../include/malloc.h"
 
@@ -20,7 +16,7 @@ void createProcess(process* proc, void(*main)())
     
     proc->pc = (uint32_t) main;
     proc->sp = (uint32_t) malloc((size_t) 0x400) + 0x400;
-    proc->flags = 0x10;
+    proc->flags = USER_MODE;
     proc->state = PROCESS_READY;
 }
 

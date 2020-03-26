@@ -21,7 +21,7 @@
 
 static rpi_aux_t* rpiAux = (rpi_aux_t*)RPI_AUX_BASE;
 static rpi_uart_t* rpiMiniUart = (rpi_uart_t*)RPI_UART_BASE;
-static fifo_t fifo_buffer;
+static fifo_t tx_buffer, rx_buffer;
 
 rpi_aux_t* RPI_GetAux(void)
 {
@@ -64,19 +64,31 @@ void RPI_MiniUartInit(void)
     // rpiMiniUart->AUX_MU_IER_REG = 2;
 
     // Setup read and write buffers for mini UART
-    // fifo_init(&fifo_buffer);
+    fifo_init(&rx_buffer);
+    fifo_init(&tx_buffer);
 
     /* Enable receiver and transmitter */
     rpiMiniUart->AUX_MU_CNTL_REG = 3;
 }
 
-void RPI_WriteToMiniUart( char c )
-{
-    /* Wait until the UART has an empty space in the FIFO */
-    while( ( rpiMiniUart->AUX_MU_LSR_REG & AUX_MULSR_TX_EMPTY ) == 0 ) { }
+// Function to print characters from transmit buffer to mini UART
+int RPI_WriteToMiniUart( )
+{  
+    char* cPtr;
+    rpi_uart_t* rpiMiniUart = RPI_GetMiniUart();
 
-    /* Write the character to the FIFO for transmission */
-    rpiMiniUart->AUX_MU_IO_REG = c;
+    while(fifo_read(tx_buffer, cPtr, 1) > 0) {
+        /* Wait until the UART has an empty space in the FIFO */
+        while( ( rpiMiniUart->AUX_MU_LSR_REG & AUX_MULSR_TX_EMPTY ) == 0 ) { }
+
+        /* Write the character to the FIFO for transmission */
+        rpiMiniUart->AUX_MU_IO_REG = *cPtr; 
+    }
+}
+
+// Function to read from mini UART and write to read buffer
+int RPI_ReadFromMiniUart() {
+
 }
 
 int RPI_printStringOfLen( char* string, int len )

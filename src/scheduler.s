@@ -43,4 +43,3 @@ _start_user_process:
     add     lr, lr, #(4*15)     // Set lr to point to user pc
     ldr     lr, [lr]            // Load pc of next process
     movs    pc, lr
-    

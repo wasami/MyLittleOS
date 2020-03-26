@@ -14,14 +14,19 @@ void dummy_a(void)
 
 void dummy_process_one(void) 
 {
-    char stringOne[] = "\r\nThis is from process 1.";
-    char stringTwo[] = "\r\nProcess 1 ended.";
+    char strOne[] = "\r\nprocess one yadayada.";
+    char strTwo[] = "\r\n one is lonely.";
+    char strThree[] = "\r\none.";
 
-    printString(&stringOne[0]);
+    printString(&strOne[0]);
 
     yield();
 
-    printString(&stringTwo[0]);
+    printString(&strThree[0]);
+
+    yield();
+
+    printString(&strTwo[0]);
     while (1)
     {
         yield();
@@ -30,13 +35,17 @@ void dummy_process_one(void)
 
 void dummy_process_two(void) 
 {
-    char stringOne[] = "\r\nThis is from process 2.";
-    char stringTwo[] = "\r\nProcess 2 ended.";
+    char stringOne[] = "\r\nprocess 2.";
+    char stringTwo[] = "\r\ntwo ended.";
+    char stringThree[] = "\r\nSomething from two.";
     
     printString(&stringOne[0]);
 
     yield();
 
+    printString(&stringThree[0]);
+
+    yield();
 
     printString(&stringTwo[0]);
     while (1)

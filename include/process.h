@@ -7,6 +7,9 @@
 #define PROCESS_READY           2
 #define PROCESS_BLOCKED         3
 
+#define USER_MODE_NOIRQ         0x90
+#define USER_MODE               0X10
+
 #define yield() __asm("SVC #1")
 
 typedef struct {

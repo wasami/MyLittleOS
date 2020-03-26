@@ -16,7 +16,7 @@ void SVC_Handler_Main(unsigned int number, unsigned int *svc_args )
         while( ( rpiMiniUart->AUX_MU_LSR_REG & AUX_MULSR_TX_EMPTY ) == 0 ) { }
 
         /* Write the character to the FIFO for transmission */
-        rpiMiniUart->AUX_MU_IO_REG = value_in_reg_0;  
+        rpiMiniUart->AUX_MU_IO_REG = value_in_reg_0;
     } 
     // SVC 1 - Process yields, Switch context
     else if(number == 1) {
